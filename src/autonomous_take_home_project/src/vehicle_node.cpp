@@ -5,10 +5,7 @@ VehicleNode::VehicleNode() : Node("vehicle_node") {
       "target_location", 10,
       std::bind(&VehicleNode::topic_callback, this, std::placeholders::_1));
 
-  /* Example publisher setup (currently commented out)
-  publisher_ = this->create_publisher<std_msgs::msg::String>("vehicle_info",
-  10);
-  */
+  publisher_ = this->create_publisher<msgs::msg::Response>("response", 10);
 
   target_ = std::make_shared<Target>();
 }
@@ -20,13 +17,34 @@ void VehicleNode::topic_callback(
   double x = msg->location.x;
   double y = msg->location.y;
 
-  /* Example logging (uncomment if needed)
-  RCLCPP_INFO(this->get_logger(),
-              "Received target location: sec=%d, nanosec=%d, x=%.2f, y=%.2f",
-              sec, nanosec, x, y);
-  */
-
   target_->set_target_data(sec, nanosec, x, y);
+
+  auto target_msg = msgs::msg::Response();
+
+  target_msg.target.position.x = target_->get_x();
+  target_msg.target.position.y = target_->get_y();
+  target_msg.target.position.z = 0.0;
+
+  target_msg.target.velocity.x = target_->get_velocity_x();
+  target_msg.target.velocity.y = target_->get_velocity_y();
+  target_msg.target.velocity.z = 0.0;
+
+  target_msg.target.acceleration.x = target_->get_acceleration_x();
+  target_msg.target.acceleration.y = target_->get_acceleration_y();
+  target_msg.target.acceleration.z = 0.0;
+
+  target_msg.target.angle = target_->get_yaw();
+  target_msg.target.anglular_velocity = target_->get_yaw_rate();
+
+  target_msg.lvtl.x = target_->get_target_x();
+  target_msg.lvtl.y = target_->get_target_y();
+  target_msg.lvtl.z = 0.0;
+
+  target_msg.target_location.x = target_->get_target_x();
+  target_msg.target_location.y = target_->get_target_y();
+  target_msg.target_location.z = 0.0;
+
+  publisher_->publish(target_msg);
 }
 
 int main(int argc, char *argv[]) {

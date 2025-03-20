@@ -18,6 +18,7 @@ class VehicleNode : public rclcpp::Node {
 
   std::shared_ptr<Target> target_;
   rclcpp::Subscription<msgs::msg::LocationStamped>::SharedPtr subscription_;
+  rclcpp::Publisher<msgs::msg::Response>::SharedPtr publisher_;
 };
 
 #endif  // VEHICLE_NODE_HPP_

@@ -1,36 +1,33 @@
-#include "msgs/msg/Response.hpp"
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "vehicle_node.hpp"
 
-class VehicleNode : public rclcpp::Node {
- public:
-  VehicleNode() : Node("vehicle_node") {
-    subscription_ = this->create_subscription<msgs::msg::Response>(
-        "target_location", 10,
-        std::bind(&VehicleNode::topic_callback, this, std::placeholders::_1));
+VehicleNode::VehicleNode() : Node("vehicle_node") {
+  subscription_ = this->create_subscription<msgs::msg::LocationStamped>(
+      "target_location", 10,
+      std::bind(&VehicleNode::topic_callback, this, std::placeholders::_1));
 
-    /* publishes to Response topic
-    publisher_ =
-        this->create_publisher<std_msgs::msg::String>("vehicle_info", 10);
-        */
-    target_ = std::make_shared<Target>();
-  }
+  /* Example publisher setup (currently commented out)
+  publisher_ = this->create_publisher<std_msgs::msg::String>("vehicle_info",
+  10);
+  */
 
- private:
-  void topic_callback(const msgs::msg::Response::SharedPtr msg) {
-    int sec = msg->header.stamp.sec;
-    int nanosec = msg->header.stamp.nanosec;
-    double x = msg->location.x;
-    double y = msg->location.y;
+  target_ = std::make_shared<Target>();
+}
 
-    /* Print out the values (or process them as needed)
-    RCLCPP_INFO(this->get_logger(),
-                "Received target location: sec=%d, nanosec=%d, x=%.2f, y=%.2f",
-                sec, nanosec, x, y); */
-  }
+void VehicleNode::topic_callback(
+    const msgs::msg::LocationStamped::SharedPtr msg) {
+  int sec = msg->header.stamp.sec;
+  int nanosec = msg->header.stamp.nanosec;
+  double x = msg->location.x;
+  double y = msg->location.y;
 
-  rclcpp::Subscription<msgs::msg::Response>::SharedPtr subscription_;
-};
+  /* Example logging (uncomment if needed)
+  RCLCPP_INFO(this->get_logger(),
+              "Received target location: sec=%d, nanosec=%d, x=%.2f, y=%.2f",
+              sec, nanosec, x, y);
+  */
+
+  target_->set_target_data(sec, nanosec, x, y);
+}
 
 int main(int argc, char *argv[]) {
   rclcpp::init(argc, argv);

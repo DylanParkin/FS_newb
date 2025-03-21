@@ -1,5 +1,7 @@
 #include "vehicle.hpp"
 
+#include <algorithm>
+
 Vehicle::Vehicle()
     : x_(0.0),
       y_(0.0),
@@ -14,11 +16,11 @@ void Vehicle::set_vehicle_target_data(double x, double y, double velocity_x,
                                       double velocity_y, double acceleration_x,
                                       double acceleration_y, float yaw,
                                       float yaw_rate) {
-  vehicle_compute_location();
-  vehicle_compute_velocity();
-  vehicle_compute_acceleration();
-  vehicle_compute_yaw();
-  vehicle_compute_yaw_rate();
+  acceleration_x_ = std::clamp(acceleration_x, -2.5,
+                               2.5);  // needs to account for overall magnitude
+  acceleration_y_ = std::clamp(acceleration_x, -2.5, 2.5);
+  velocity_x_ = std::clamp(velocity_x, -10.0, 10.0);
+  velocity_y_ = std::clamp(velocity_y, -10.0, 10.0);
 }
 
 void Vehicle::vehicle_compute_location() {}

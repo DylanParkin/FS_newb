@@ -21,9 +21,10 @@ class Target {
   double get_yaw_rate();
   double get_target_x();
   double get_target_y();
+  Vehicle get_vehicle();
 
   // Main computations
-  void is_target_valid(double x, double y);
+  void is_target_valid(double x, double y, int depth);
 
   // For recursive target location validity function
   double compute_velocity_mag(double x, double y);

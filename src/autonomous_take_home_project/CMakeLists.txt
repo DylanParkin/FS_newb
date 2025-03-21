@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(msgs REQUIRED)
 
-add_executable(vehicle_node src/vehicle_node.cpp src/target.cpp)
+add_executable(vehicle_node src/vehicle_node.cpp src/target.cpp src/vehicle.cpp)
 
 
 ament_target_dependencies(vehicle_node rclcpp msgs)

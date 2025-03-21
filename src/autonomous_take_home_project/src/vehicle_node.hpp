@@ -8,6 +8,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/header.hpp"
 #include "target.hpp"
+#include "vehicle.hpp"
 
 class VehicleNode : public rclcpp::Node {
  public:
@@ -17,6 +18,7 @@ class VehicleNode : public rclcpp::Node {
   void topic_callback(const msgs::msg::LocationStamped::SharedPtr msg);
 
   std::shared_ptr<Target> target_;
+  std::shared_ptr<Vehicle> vehicle_;
   rclcpp::Subscription<msgs::msg::LocationStamped>::SharedPtr subscription_;
   rclcpp::Publisher<msgs::msg::Response>::SharedPtr publisher_;
 };

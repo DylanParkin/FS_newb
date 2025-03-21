@@ -8,6 +8,7 @@ VehicleNode::VehicleNode() : Node("vehicle_node") {
   publisher_ = this->create_publisher<msgs::msg::Response>("response", 10);
 
   target_ = std::make_shared<Target>();
+  vehicle_ = std::make_shared<Vehicle>();
 }
 
 void VehicleNode::topic_callback(

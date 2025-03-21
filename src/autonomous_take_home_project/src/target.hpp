@@ -1,4 +1,8 @@
 #pragma once
+#include <iostream>
+
+#include "rclcpp/rclcpp.hpp"
+#include "vehicle.hpp"
 
 class Target {
  public:
@@ -13,19 +17,21 @@ class Target {
   double get_velocity_y();
   double get_acceleration_x();
   double get_acceleration_y();
-  float get_yaw();
-  float get_yaw_rate();
+  double get_yaw();
+  double get_yaw_rate();
   double get_target_x();
   double get_target_y();
 
-  // Computations
-  void compute_velocity();
-  void compute_acceleration();
-  void compute_yaw();
-  void compute_yaw_rate();
-  void is_target_valid();
+  // Main computations
+  void is_target_valid(double x, double y);
+
+  // For recursive target location validity function
+  double compute_velocity_mag(double x, double y);
+  double compute_acceleration_mag(double x, double y);
+  double compute_yaw_rate_mag(double x, double y);
 
  private:
+  std::shared_ptr<Vehicle> vehicle_;
   int sec_;
   int nanosec_;
   float time_;
@@ -43,8 +49,8 @@ class Target {
   float yaw_;
   float yaw_rate_;
   float prev_yaw_;
-  double valid_target_x_;  // last valid target location
-  double valid_target_y_;  // and the overall target location
+  double valid_target_x_;
+  double valid_target_y_;
   double valid_target_velocity_x_;
   double valid_target_velocity_y_;
 };

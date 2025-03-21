@@ -32,7 +32,8 @@ class LocationPublisher : public rclcpp::Node {
   }
 
   ~LocationPublisher() {
-    RCLCPP_INFO(this->get_logger(), "node shutting down");
+    RCLCPP_INFO(this->get_logger(),
+                "node shutting down, changes r coming thru");
   }
 
  private:
@@ -116,7 +117,7 @@ class LocationPublisher : public rclcpp::Node {
 
   void response_callback(const msgs::msg::Response msg) {
     RCLCPP_INFO(this->get_logger(), "Received response");
-    rclcpp::shutdown();
+    // rclcpp::shutdown();
   }
 
   rclcpp::Publisher<msgs::msg::LocationStamped>::SharedPtr publisher_;
